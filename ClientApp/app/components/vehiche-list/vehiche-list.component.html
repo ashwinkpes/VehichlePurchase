@@ -1,0 +1,46 @@
+<h2>List of vehichles</h2>
+
+<p>
+  <a [routerLink]="['/vehicles/new']" class="btn btn-primary">Create vehichle</a>
+</p>
+
+<div class="form-group well">
+  <label for="make"></label>
+  <select  id="make" class="form-control" [(ngModel)]="query.MakeId" (change)="onFilterChange()">
+   <option value=""></option>
+   <option *ngFor="let make of makes" value="{{make.id}}">{{make.name}}</option>
+  </select>
+</div>
+
+<table class="table table-responsive">
+  <thead>
+    <tr>
+        <th *ngFor="let c of columns">
+            <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+              {{ c.title }}
+              <span *ngIf="query.SortBy === c.key" 
+                class="glyphicon"
+                [class.glyphicon-chevron-up]="query.IsSortAscending"
+                [class.glyphicon-chevron-down]="!query.IsSortAscending"
+              ></span>
+            </div>
+            <div *ngIf="!c.isSortable">
+              {{ c.title }}
+            </div>
+           </th>      
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let v of queryResult.items">
+      <td>{{v.id}}</td>
+      <td>{{v.make.name}}</td>
+      <td>{{v.model.name}}</td>
+      <td>{{v.contact.name}}</td>
+      <td>
+        <a [routerLink]="['/vehicles/',v.id]" class="btn btn-primary">View</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<pagination [total-items]="queryResult.totalItems" [page-size]="query.PageSize" (page-changed)="onPageChange($event)"></pagination>
